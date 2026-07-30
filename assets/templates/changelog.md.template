@@ -1,0 +1,13 @@
+# {{PROJECT_NAME}} changelog
+
+> Effective substantive changes in reverse chronological order. Exclude pure discussion, rejected intermediate attempts, and formatting-only edits.
+
+## {{BOOTSTRAP_DATE}}
+
+### Project governance baseline
+
+- Established the project's collaboration rules, stable context, current-work snapshot, decision record, artifact navigation, effective-change history, and archive boundary.
+- Documented the cold-start sequence and lifecycle update routing.
+- Classified existing sources by scope and authority without promoting task details into project-level truth.
+- Recorded the confirmed asset-placement policy and any effective relocations or archival.
+- Recorded onboarding state as {{INSTALLATION_STATE}}.

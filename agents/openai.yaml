@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bootstrap Project OS"
+  short_description: "Onboard, structure, and install a source-safe project OS"
+  default_prompt: "Use $bootstrap-project-os to onboard this project, classify source authority, confirm an adaptive asset-placement policy, and install a durable local collaboration OS."

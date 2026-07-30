@@ -1,0 +1,82 @@
+# {{PROJECT_NAME}} collaboration rules
+
+This file is the cross-agent source of truth for collaboration, safety, and update routing. Project and business facts live in the sources registered by `artifact_index.md`.
+
+<!-- project-os:task-boundary=declared -->
+<!-- project-os:asset-placement=declared -->
+
+## Cold start
+
+Before acting in a new session, read:
+
+```text
+AGENTS.md
+→ project_context.md
+→ current_work.md
+→ decision_log.md
+→ artifact_index.md
+```
+
+Read `changelog.md` only when history matters. Use `artifact_index.md` to find detailed sources, and read them only when the current task touches their scope.
+
+## Source roles
+
+```text
+Collaboration and safety rules       → AGENTS.md
+Stable confirmed project truth       → project_context.md
+Project-level progress and blockers  → current_work.md
+Durable confirmed project decisions  → decision_log.md
+Artifact and source navigation       → artifact_index.md
+Effective substantive history        → changelog.md
+Detailed domain facts                → sources registered in artifact_index.md
+Task, checklist, issue, and QA status → corresponding execution source
+Non-authoritative reference/history  → archive/
+```
+
+## Read and change safely
+
+- Read the source that owns a fact before editing it.
+- Preserve existing work and unrelated changes.
+- Separate user-confirmed facts, source evidence, recommendations, and unknowns.
+- Do not infer confirmed requirements, decisions, ownership, approvals, or project scope.
+- Do not read or expose secrets. Do not recursively inspect large or generated assets.
+- If sources conflict, stop the conflicting change, identify both sources, and request resolution.
+- If required context cannot be read, do not modify affected critical material.
+
+## Route updates by meaning
+
+```text
+Stable project state or constraint    → project_context.md or its domain source
+Current project objective or blocker  → current_work.md
+Durable confirmed project choice      → decision_log.md, pointing to detail
+Detailed requirement or design        → its registered domain source
+Task, checklist, issue, or test status → its registered execution source
+Effective substantive change          → changelog.md
+Artifact lifecycle or navigation      → artifact_index.md
+Reusable collaboration safeguard      → AGENTS.md
+Background or superseded material     → archive/
+```
+
+Update only files whose owned facts changed. Pure discussion, rejected drafts, and formatting-only edits normally do not enter governance history.
+
+## Project-level and work-item boundary
+
+- A Checklist, Task, Todo, Issue, plan, launch guide, migration note, or other work-item document owns only its declared scope.
+- A work-item stage is not the whole-project stage. A work-item choice is not a project decision.
+- Promote a work-item fact only when the user or an explicitly canonical project-level source confirms its broader scope.
+- Do not place business workflow details, task stages, checklist IDs, feature rules, or domain plans in this file.
+
+## Asset placement
+
+- Reserve the project root for governance entry points, confirmed project-level anchors, and tool-required files.
+- Follow the detailed directory map in `artifact_index.md`.
+- Place new assets automatically when their role and destination are unambiguous.
+- Do not create empty directories for hypothetical future needs.
+- Do not copy external canonical sources locally merely to fit the directory structure.
+- Ask before moving, renaming, deleting, or archiving existing assets unless the user already approved the exact placement preview.
+
+{{ASSET_PLACEMENT_RULES}}
+
+## Cross-project operating rules
+
+{{CROSS_PROJECT_OPERATING_RULES}}

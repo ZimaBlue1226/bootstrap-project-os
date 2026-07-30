@@ -1,0 +1,54 @@
+# {{PROJECT_NAME}} artifact index
+
+> Navigation map for authoritative, current, work-item, historical, external, large, generated, and sensitive artifacts. This file does not duplicate their contents or live progress.
+
+<!-- project-os:source-scope-map=declared -->
+<!-- project-os:directory-map=declared -->
+
+## Governance entry points
+
+| Artifact | Purpose | Authority or lifecycle |
+|---|---|---|
+| `AGENTS.md` | Collaboration and safety rules | Current |
+| `project_context.md` | Stable confirmed project-level context | Current |
+| `current_work.md` | Project-level progress and handoff | Current |
+| `decision_log.md` | Confirmed project-level decision summaries | Current |
+| `artifact_index.md` | This navigation map | Current |
+| `changelog.md` | Effective substantive history | Current |
+
+## Project, domain, workstream, and task sources
+
+| Source | Scope | Owns | Must not determine | Authority basis | Lifecycle |
+|---|---|---|---|---|---|
+| {{SOURCE}} | {{SCOPE}} | {{OWNED_FACTS}} | {{NON_OWNED_FACTS}} | {{AUTHORITY_BASIS}} | {{LIFECYCLE}} |
+
+## Directory and placement policy
+
+| Location or external system | Intended contents | Must not contain | Lifecycle or placement rule |
+|---|---|---|---|
+| Project root | {{ROOT_CONTENTS}} | {{ROOT_EXCLUSIONS}} | {{ROOT_POLICY}} |
+| {{PLACEMENT_LOCATION}} | {{PLACEMENT_CONTENTS}} | {{PLACEMENT_EXCLUSIONS}} | {{PLACEMENT_LIFECYCLE}} |
+
+## Existing-asset dispositions
+
+| Current asset | Disposition | Target or retained location | Reason | Approval state |
+|---|---|---|---|---|
+| {{CURRENT_ASSET}} | {{DISPOSITION}} | {{TARGET_LOCATION}} | {{PLACEMENT_REASON}} | {{APPROVAL_STATE}} |
+
+## External systems
+
+| System or source | Identifier or URL | Scope and authority | Access assumptions | Local-summary boundary |
+|---|---|---|---|---|
+| {{EXTERNAL_SOURCE}} | {{EXTERNAL_IDENTIFIER}} | {{EXTERNAL_AUTHORITY}} | {{ACCESS_ASSUMPTIONS}} | {{LOCAL_SUMMARY_BOUNDARY}} |
+
+## Large or generated assets
+
+{{LARGE_ASSETS}}
+
+## Sensitive locations
+
+{{SENSITIVE_LOCATIONS}}
+
+## Historical and archived material
+
+{{ARCHIVED_MATERIAL}}

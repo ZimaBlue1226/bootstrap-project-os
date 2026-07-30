@@ -1,0 +1,35 @@
+# {{PROJECT_NAME}} current context
+
+> Stable confirmed project-level context. Progress belongs in `current_work.md`; decisions in `decision_log.md`; artifacts in `artifact_index.md`; history in `changelog.md`. A work-item document cannot define this context unless its project-level authority is explicit.
+
+<!-- project-os:grounding-status={{GROUNDING_STATUS}} -->
+
+## Project identity and purpose
+
+{{PROJECT_IDENTITY_AND_PURPOSE}}
+
+## Users or consumers
+
+{{USERS_OR_CONSUMERS}}
+
+## Current project scope
+
+{{CURRENT_PROJECT_SCOPE}}
+
+## Core modules or project-level workstreams
+
+{{CORE_MODULES_OR_WORKSTREAMS}}
+
+## Stable constraints and operating assumptions
+
+{{STABLE_PROJECT_CONSTRAINTS}}
+
+## Canonical sources and authority
+
+| Domain | Source | Scope | Authority basis | Summary boundary |
+|---|---|---|---|---|
+| {{DOMAIN}} | {{CANONICAL_SOURCE}} | {{SOURCE_SCOPE}} | {{AUTHORITY_BASIS}} | {{SUMMARY_BOUNDARY}} |
+
+## Explicit unknowns
+
+{{PROJECT_LEVEL_UNKNOWNS}}

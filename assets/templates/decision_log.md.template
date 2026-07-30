@@ -1,0 +1,20 @@
+# {{PROJECT_NAME}} decision log
+
+> Thin record of confirmed, durable, project-level choices. Keep task-level choices in their task source and detailed requirements in their canonical domain source. Newest decisions come first.
+
+## Decision format
+
+```text
+## D-XX · Decision title (YYYY-MM-DD)
+
+- Scope: project
+- Decision:
+- Context:
+- Rationale:
+- Impact:
+- Reversal conditions:
+- Detailed source:
+- Authority or confirmation provenance:
+```
+
+{{INITIAL_PROJECT_DECISIONS_OR_EMPTY_STATE}}

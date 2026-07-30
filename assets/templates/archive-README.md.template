@@ -1,0 +1,9 @@
+# Archive
+
+This directory contains background, research, external references, superseded designs, and process material that remains useful for historical understanding.
+
+Archive content is non-authoritative. Current project truth remains in the canonical sources listed by `artifact_index.md`.
+
+Organize material by purpose or source, use stable descriptive names, and retain provenance when known. Do not move active canonical sources here without explicit approval.
+
+Ordinary discovery and cold start must not recursively read this directory. Read archived material only when a task explicitly requires historical or background context.

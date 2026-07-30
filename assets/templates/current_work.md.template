@@ -1,0 +1,35 @@
+# {{PROJECT_NAME}} current work
+
+> Project-level progress and handoff snapshot. Detailed issues, checklists, QA cases, owners, builds, and live execution status remain in their registered execution sources.
+
+## Current project stage
+
+{{CURRENT_PROJECT_STAGE}}
+
+## Immediate project-level objective
+
+{{IMMEDIATE_PROJECT_OBJECTIVE}}
+
+## Project-level workstreams
+
+| Workstream | Project-level status | Confirmed facts | Next milestone | Detailed source |
+|---|---|---|---|---|
+| {{WORKSTREAM}} | {{STATUS}} | {{FACTS}} | {{NEXT_MILESTONE}} | {{WORKSTREAM_SOURCE}} |
+
+## Registered work items
+
+| Work item | Type | Status source | Project-level relationship |
+|---|---|---|---|
+| {{WORK_ITEM}} | {{WORK_ITEM_TYPE}} | {{WORK_ITEM_SOURCE}} | {{WORK_ITEM_BOUNDARY}} |
+
+## Project-level blockers and decisions needed
+
+{{BLOCKERS_AND_DECISIONS}}
+
+## Onboarding gaps
+
+{{ONBOARDING_GAPS}}
+
+## Handoff
+
+{{HANDOFF_ITEMS}}
