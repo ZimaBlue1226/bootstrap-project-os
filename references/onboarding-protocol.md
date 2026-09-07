@@ -29,7 +29,7 @@ Do not ask for facts already explicit in the request or a confirmed project-leve
 
 ## Link-first intake
 
-After shallow inspection, invite direct answers or existing sources. Keep the prompt compact:
+For new-project intake, after shallow inspection invite direct answers or existing sources. The fields below are a menu, not a mandatory questionnaire. For Repair, ask only for missing facts that change the current repair:
 
 ```text
 I can build the project context from short answers or from sources you already have.
@@ -60,6 +60,17 @@ extract a proposed summary for your review.
 ```
 
 When a source requires authentication, use an available connected app only within the user's request. Otherwise ask the user to connect it, export it, provide a local path, or summarize the relevant facts.
+
+### Repair question triage
+
+1. Establish current stage and immediate priorities before treating old review notes as active work. A stale pending label is a historical assertion, not proof of an unfinished task.
+2. Check registered sources and prior answers first. Merge questions about the same business outcome even when several documents use different terms for it.
+3. Ask in recognizable product or work language, describing the concrete missing fact rather than quoting an unexplained internal review label. Adapt question size to the user; one issue at a time when requested.
+4. Ask only when the answer affects current scope, authority, safe action, or a material conclusion. Governance onboarding is not an exhaustive QA interview.
+5. If the user skips an item, remove it from this round's question queue without declaring it resolved. Do not reintroduce it as a blocker unless it genuinely blocks the authorized next action; explain that dependency if it does.
+6. Once an answer resolves several current references, reconcile those references within the authorized repair instead of requesting separate confirmations. Missing unrelated details do not block independent confirmed updates.
+
+Stop when the current task can be completed safely and the remaining unknowns are merely future domain work. Do not automatically end every answer with another question.
 
 ## Source classification
 

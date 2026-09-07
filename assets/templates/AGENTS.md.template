@@ -13,11 +13,9 @@ Before acting in a new session, read:
 AGENTS.md
 → project_context.md
 → current_work.md
-→ decision_log.md
-→ artifact_index.md
 ```
 
-Read `changelog.md` only when history matters. Use `artifact_index.md` to find detailed sources, and read them only when the current task touches their scope.
+Read `artifact_index.md` when locating sources, `decision_log.md` when decision rationale matters, and `changelog.md` when history matters. Open domain sources only when the task touches their scope. Reuse explicitly mapped equivalents where the project already has role owners.
 
 ## Source roles
 
@@ -38,6 +36,7 @@ Non-authoritative reference/history  → archive/
 - Read the source that owns a fact before editing it.
 - Preserve existing work and unrelated changes.
 - Separate user-confirmed facts, source evidence, recommendations, and unknowns.
+- Distinguish confirmed plans from released behavior, and business completion from independently verified evidence. User-confirmed completion must not remain "unimplemented" merely because tests were not inspected; do not invent those tests either.
 - Do not infer confirmed requirements, decisions, ownership, approvals, or project scope.
 - Do not read or expose secrets. Do not recursively inspect large or generated assets.
 - If sources conflict, stop the conflicting change, identify both sources, and request resolution.
@@ -54,10 +53,16 @@ Task, checklist, issue, or test status → its registered execution source
 Effective substantive change          → changelog.md
 Artifact lifecycle or navigation      → artifact_index.md
 Reusable collaboration safeguard      → AGENTS.md
+Reusable scenario-specific method     → existing runbook or method source
+Executable automation or tests        → existing tool/script source
 Background or superseded material     → archive/
 ```
 
 Update only files whose owned facts changed. Pure discussion, rejected drafts, and formatting-only edits normally do not enter governance history.
+
+Within an authorized update, reconcile the owning source and directly relevant current references in the same turn; remove contradictory old statuses rather than appending another competing account. Keep historical statements time-scoped. Independent confirmed changes need not wait for unrelated missing details. Do not treat discussion-only requests as authorization to write.
+
+Current work contains current priorities, not all historical pending items. Completed work exits active milestones; paused work is not an active blocker. Ask about real current outcomes before reviving old review labels, merge duplicate questions, and respect skipped items unless they block safe execution.
 
 ## Project-level and work-item boundary
 
@@ -72,6 +77,8 @@ Update only files whose owned facts changed. Pure discussion, rejected drafts, a
 - Follow the detailed directory map in `artifact_index.md`.
 - Place new assets automatically when their role and destination are unambiguous.
 - Do not create empty directories for hypothetical future needs.
+- Create persistent material only for a distinct continuing purpose not served by an existing source. Promote reusable outcomes before retiring working material; archive only independent historical value.
+- Place temporary execution files in the existing temporary area. Clean known task-created files after verification within the project's authorization; check ownership and use before removing older files, without following links or junctions. Do not turn ephemeral cleanup into index or changelog entries.
 - Do not copy external canonical sources locally merely to fit the directory structure.
 - Ask before moving, renaming, deleting, or archiving existing assets unless the user already approved the exact placement preview.
 

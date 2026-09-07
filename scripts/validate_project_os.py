@@ -9,6 +9,8 @@ import re
 from pathlib import Path
 from typing import Any
 
+from inspect_project import is_sensitive_name
+
 
 CORE_FILES = {
     "collaboration_rules": "AGENTS.md",
@@ -32,6 +34,7 @@ TASK_BOUNDARY_MARKER = "project-os:task-boundary=declared"
 SOURCE_SCOPE_MARKER = "project-os:source-scope-map=declared"
 ASSET_PLACEMENT_MARKER = "project-os:asset-placement=declared"
 DIRECTORY_MAP_MARKER = "project-os:directory-map=declared"
+ROLE_MAP_PATTERN = re.compile(r"<!--\s*project-os:role-map=(.*?)-->", re.DOTALL)
 MARKDOWN_REFERENCE_PATTERN = re.compile(r"`([^`\r\n]+\.md)`", re.IGNORECASE)
 ALLOWED_AGENTS_MARKDOWN_REFERENCES = {
     *(filename.casefold() for filename in CORE_FILES.values()),
@@ -62,6 +65,53 @@ def normalize_reference(value: str) -> str:
     return value.strip().replace("\\", "/").casefold()
 
 
+def safe_local_source(root: Path, value: str) -> Path:
+    """Reject unsafe mappings before inspecting or reading their content."""
+    if "\\" in value or ":" in value or "#" in value or "?" in value:
+        raise ValueError("Use a project-relative POSIX file path without fragments.")
+    relative = Path(value)
+    if relative.is_absolute() or ".." in relative.parts or not relative.parts:
+        raise ValueError("Role source must stay within the project root.")
+    protected = {".git", ".hg", ".svn", ".ssh", "archive", "archives"}
+    current = root
+    for part in relative.parts:
+        if part.casefold() in protected or is_sensitive_name(part):
+            raise ValueError("Role source cannot be sensitive, archived, or VCS data.")
+        current = current / part
+        if current.is_symlink() or getattr(current, "is_junction", lambda: False)():
+            raise ValueError("Role sources must not traverse links or junctions.")
+    if not current.resolve().is_relative_to(root):
+        raise ValueError("Role source resolves outside the project root.")
+    return current
+
+
+def resolve_roles(agents: str) -> dict[str, str]:
+    """A partial JSON map in AGENTS overrides defaults; never infer owners."""
+    matches = ROLE_MAP_PATTERN.findall(agents)
+    if len(matches) > 1:
+        raise ValueError("Declare at most one project-os:role-map comment.")
+    if not matches:
+        return dict(CORE_FILES)
+
+    def unique_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+        result: dict[str, Any] = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError(f"Duplicate role key: {key}")
+            result[key] = value
+        return result
+
+    mapping = json.loads(matches[0], object_pairs_hook=unique_keys)
+    if not isinstance(mapping, dict):
+        raise ValueError("Role map must be a JSON object.")
+    for role, source in mapping.items():
+        if role not in CORE_FILES or not isinstance(source, str) or not source.strip():
+            raise ValueError(f"Unknown role or invalid source: {role}")
+        if role == "collaboration_rules" and source != "AGENTS.md":
+            raise ValueError("AGENTS.md remains the local routing and safety entry.")
+    return {**CORE_FILES, **mapping}
+
+
 def validate(root: Path) -> dict[str, Any]:
     root = root.resolve()
     if not root.is_dir():
@@ -69,15 +119,36 @@ def validate(root: Path) -> dict[str, Any]:
 
     issues: list[dict[str, str]] = []
     contents: dict[str, str] = {}
+    entry = safe_local_source(root, "AGENTS.md")
+    entry_text = entry.read_text(encoding="utf-8-sig") if entry.is_file() else ""
+    try:
+        role_sources = resolve_roles(entry_text)
+    except (ValueError, json.JSONDecodeError) as exc:
+        issues.append(issue("error", "invalid-role-map", str(exc), "AGENTS.md"))
+        role_sources = dict(CORE_FILES)
+    external_roles: list[str] = []
+    read_cache: dict[Path, str] = {}
 
     for role, filename in CORE_FILES.items():
-        path = root / filename
+        source = role_sources[role]
+        if re.match(r"^https?://[^/\s]+(?:/[^\s]*)?$", source):
+            external_roles.append(role)
+            issues.append(issue("warning", "external-role-unverified",
+                                f"{role} maps to an external owner; verify access, scope and freshness manually."))
+            continue
+        try:
+            path = safe_local_source(root, source)
+        except ValueError as exc:
+            issues.append(issue("error", "unsafe-role-source", f"{role}: {exc}"))
+            continue
         if not path.is_file():
             issues.append(
-                issue("error", "missing-core-role", f"Missing default source for {role}.", filename)
+                issue("error", "missing-core-role", f"Missing declared source for {role}.", source)
             )
             continue
-        text = path.read_text(encoding="utf-8-sig")
+        if path not in read_cache:
+            read_cache[path] = path.read_text(encoding="utf-8-sig")
+        text = read_cache[path]
         contents[filename] = text
         if not text.strip():
             issues.append(
@@ -97,12 +168,12 @@ def validate(root: Path) -> dict[str, Any]:
 
     agents = contents.get("AGENTS.md", "")
     if agents:
-        for filename in CORE_FILES.values():
+        for filename in role_sources.values():
             if filename not in agents:
                 issues.append(
                     issue(
                         "error",
-                        "broken-cold-start-route",
+                        "unregistered-role-source",
                         f"AGENTS.md does not reference {filename}.",
                         "AGENTS.md",
                     )
@@ -146,6 +217,7 @@ def validate(root: Path) -> dict[str, Any]:
                     for match in MARKDOWN_REFERENCE_PATTERN.findall(agents)
                 )
                 if reference not in ALLOWED_AGENTS_MARKDOWN_REFERENCES
+                and reference not in {normalize_reference(s) for s in role_sources.values()}
             }
         )
         for reference in unexpected_references:
@@ -242,6 +314,7 @@ def validate(root: Path) -> dict[str, Any]:
             path.is_file()
             and path.suffix.casefold() in root_document_suffixes
             and path.name.casefold() not in ALLOWED_ROOT_DOCUMENTS
+            and path.name.casefold() not in {normalize_reference(s) for s in role_sources.values()}
         ):
             issues.append(
                 issue(
@@ -282,7 +355,7 @@ def validate(root: Path) -> dict[str, Any]:
 
     if errors:
         status = "invalid"
-    elif grounding_status == "ready" and placement_status == "declared":
+    elif grounding_status == "ready" and placement_status == "declared" and not external_roles:
         status = "ready"
     else:
         status = "ready_with_gaps"
@@ -293,15 +366,17 @@ def validate(root: Path) -> dict[str, Any]:
         "structure_status": structure_status,
         "grounding_status": grounding_status,
         "placement_status": placement_status,
+        "role_sources": role_sources,
+        "external_roles": external_roles,
+        "semantic_status": "not_checked",
         "errors": errors,
         "warnings": warnings,
         "issues": issues,
         "note": (
-            "READY means the structure is valid and project_context.md declares grounded core facts. "
-            "READY also requires a declared asset-placement policy and directory map. "
-            "READY_WITH_GAPS means the governance kernel is usable but onboarding, source authority, "
-            "or physical placement still needs input. Manually review the contamination and placement "
-            "checks in validation-rubric.md."
+            "READY is an automated structural result with declared grounding and placement, not proof "
+            "of factual freshness, source authority, or collaboration quality. Semantic checks are NOT CHECKED. "
+            "READY_WITH_GAPS indicates missing declarations or external role verification. "
+            "Perform scoped semantic and behavioral checks from validation-rubric.md before claiming full readiness."
         ),
     }
 

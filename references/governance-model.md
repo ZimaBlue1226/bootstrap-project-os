@@ -95,6 +95,22 @@ For every non-governance source, record both what it owns and what it must not d
 
 ## Lifecycle routing
 
+### Business state and evidence are independent
+
+Business state can be proposed, planned, in progress, released/completed, paused, or superseded. Evidence may be a user confirmation, a dated document, or a scoped runtime/test observation. These are reasoning dimensions, not mandatory new tables in every project.
+
+- A confirmed plan does not replace the released baseline as implemented behavior; identify the intended version or scope when they coexist.
+- User-confirmed completion replaces an obsolete "not implemented" claim within the confirmed scope. Lack of independently inspected tests does not make the work unfinished again, and completion does not invent tests, approvals, resource IDs, or configuration details.
+- Paused work leaves active milestones and blockers; keep a short restart condition only when useful. Paused does not mean the fault was fixed or the work was abandoned permanently.
+- A document's lifecycle is separate from the product's status. Finishing a review copy does not approve the product; releasing a feature does not make its maintained specification an archive.
+- Runtime evidence describes actual behavior within its observed scope, period, and filters. A specification may own intended behavior. Do not resolve this difference by silently turning either into the other.
+
+### Reconcile rather than accumulate
+
+Within an authorized update: identify what the new confirmation actually covers → update the owning source → inspect directly relevant current references for contradictory old states → remove or qualify those states → retain historical records with their time boundaries → verify the diff.
+
+Do not add a new completion paragraph while leaving the same feature "pending" in the current table. Do not scan or rewrite unrelated domains, create a separate tracking document merely to restate completion, or carry closed items indefinitely in current work. Partial confirmation closes only the covered portion; the remainder stays explicit without becoming an invented project blocker.
+
 | Change type | Primary destination |
 |---|---|
 | Stable identity, scope, capability, constraint, or current operating model | Stable context or detailed canonical source |
@@ -104,7 +120,10 @@ For every non-governance source, record both what it owns and what it must not d
 | Effective substantive change | Changelog |
 | Artifact created, replaced, deprecated, relocated, or reclassified | Artifact index |
 | Reusable cross-task safety or collaboration lesson | Collaboration rules |
-| Research, superseded design, background, reference, or third-party process material | Non-authoritative archive |
+| Reusable scenario-specific operation or recovery method | Existing runbook or equivalent method source |
+| Executable automation or tests | Existing tool/script source; update method instructions only if usage changed |
+| Active research, draft or review | Existing work source; `work/` when no convention exists |
+| Superseded design, background, reference, or completed research with independent historical value | Non-authoritative archive |
 | Routine issue, bug, test case, owner, live status, or build-specific note | The project's execution tracker |
 | Pure discussion, failed experiment, or rejected draft with no continuing value | Usually nowhere; archive only when future reference is justified |
 
@@ -144,6 +163,8 @@ External systems can be authoritative. Record their URL or identifier, scope, ac
 - Split a file when it repeatedly mixes facts with different owners or change rates.
 - Add a wiki or retrieval layer only after source authority and lifecycle routing are stable.
 - Keep execution details in the system where work actually happens; link rather than duplicate.
+- Before creating persistent material, ask whether it has an independent continuing purpose not served by an existing source. Otherwise update that source or keep the discussion in the conversation. An index is navigation, not a migration ledger; current work is not a registry of all tasks.
+- Rules define cross-task boundaries, runbooks define conditional methods, and tools implement actions. A completed execution alone does not justify a new rule or runbook.
 
 ## Common failure modes
 

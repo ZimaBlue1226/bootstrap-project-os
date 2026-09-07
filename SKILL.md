@@ -11,15 +11,14 @@ Install an authority, lifecycle, and placement-routing system for future collabo
 
 Preserve the project's own facts, tools, roles, language, and working style. Never use the largest, only, or most detailed document as a proxy for the whole project without confirming its scope and authority.
 
-## Required references
+## Load only the relevant guidance
 
-Read these files before acting:
+- Initial Bootstrap or a broad Audit: read `references/governance-model.md`, `references/project-adaptation.md`, and `references/validation-rubric.md`; add the references below when their operations apply.
+- Onboard or material clarification: read `references/onboarding-protocol.md` before asking questions.
+- Placement policy or asset disposition: read `references/asset-placement.md` before proposing or changing it.
+- Focused Repair: read the project entry rules, affected authoritative sources, and only the reference sections needed for the change. Follow their links when a conflict requires more context; do not load the whole project or every reference.
 
-1. `references/governance-model.md` for semantic roles, lifecycle routing, and the promotion firewall.
-2. `references/project-adaptation.md` before inspecting or mapping an existing project.
-3. `references/onboarding-protocol.md` before asking for core facts or user-provided sources.
-4. `references/asset-placement.md` before proposing directories, moving existing assets, or defining where future assets belong.
-5. `references/validation-rubric.md` before final validation.
+Routine business updates use the project's established update routes, not a fresh Bootstrap. A narrow repair does not require executing every numbered step below.
 
 Use `assets/templates/` as structural aids. Adapt them to the target project and remove every placeholder before delivery.
 
@@ -54,7 +53,7 @@ If the user requests only discussion, planning, or audit, do not write files.
 
 ### 2. Inspect safely
 
-Run:
+For initial discovery or a broad structural audit, run:
 
 ```text
 python <skill-dir>/scripts/inspect_project.py --root <project-root>
@@ -71,9 +70,11 @@ Then read only relevant text entry points:
 
 Follow existing project-specific safety rules before continuing.
 
+For a focused Repair, skip this inventory when the affected sources and boundaries are already known. Read those sources and inspect the diff; expand discovery only for an unresolved dependency or ownership conflict.
+
 ### 3. Run concise, source-aware onboarding
 
-Before writing a bootstrap when core project facts or source scope are unclear, ask one compact onboarding prompt. Invite either direct answers or existing sources such as:
+When material project facts are unclear, first check the existing entries and user confirmations. Ask about the current stage and immediate goal before carrying old pending items forward. Use the questioning and stopping rules in `references/onboarding-protocol.md`; do not turn a governance repair into exhaustive feature acceptance. Invite direct answers or existing sources such as:
 
 - GitHub or other repositories
 - README, product briefs, architecture or requirements documents
@@ -126,6 +127,8 @@ AGENTS.md           = cross-task collaboration rule or project-wide operational 
 
 Everything else stays in its domain or task source, is indexed with a boundary, or remains an explicit unknown. When scope or authority is ambiguous enough to change the result, pause and ask.
 
+Separate business status from evidence status. A confirmed plan is not deployed behavior; user-confirmed completion is not a test report. For status changes, apply the reconciliation loop in `references/governance-model.md` rather than only appending the new statement.
+
 ### 5. Establish the asset-placement policy
 
 Read `references/asset-placement.md`.
@@ -170,6 +173,10 @@ changelog.md
 archive/README.md
 ```
 
+The six governance roles are the default for a durable project, not six mandatory duplicate files. Create the archive boundary only when an archive is actually used. Existing README, ADR index, or external tracker roles may be reused with explicit ownership. For validator-readable alternatives, declare the role map in `AGENTS.md` as described in `references/validation-rubric.md`.
+
+Default cold start is `AGENTS.md → project_context.md → current_work.md` (or their explicitly mapped equivalents). The index is for locating sources, decisions for rationale, and changelog for history; these are conditional reads, not default loads.
+
 For every non-governance source, record what it owns and what it must not determine. Keep code, product, technical, legal, design, research, QA, operational, external-system, and execution sources at their actual locations.
 
 ### 7. Preview material changes
@@ -200,6 +207,8 @@ Ensure:
 
 Populate documents with real known facts. Do not leave unresolved placeholders or present example records as real.
 
+Create another persistent document only when it has a distinct continuing responsibility that no existing source can serve. Remove unused template sections; do not install migration ledgers, task inventories, or empty future directories by default. Preserve the existing authorization boundary for edits and cleanup.
+
 Set the grounding marker in `project_context.md`:
 
 ```text
@@ -210,7 +219,7 @@ Use `needs-input` instead of `ready` when project purpose, project stage, immedi
 
 ### 9. Validate
 
-Run:
+For Bootstrap or broad structural changes, run:
 
 ```text
 python <skill-dir>/scripts/validate_project_os.py --root <project-root>
@@ -218,15 +227,17 @@ python <skill-dir>/scripts/validate_project_os.py --root <project-root>
 
 Interpret:
 
-- `READY`: structure is valid, core project facts are grounded, and cold start is usable.
-- `READY_WITH_GAPS`: governance is structurally usable, but onboarding facts or authority mappings still need user input.
+- `READY`: automated structural checks pass and required declarations are present; factual freshness and collaboration behavior still need semantic review.
+- `READY_WITH_GAPS`: structure is usable but declarations or mapped external-source verification remain incomplete.
 - `INVALID`: structural, safety, placeholder, or authority-boundary errors remain.
 
 Fix all errors and review warnings. Then perform the manual cold-start and contamination checks in `references/validation-rubric.md`.
 
+For a focused Repair without structural changes, check the affected source, relevant current references, and diff. Do not rerun a whole-project scan for a wording or status update. When evaluating this skill itself, use the behavioral cases and ablation protocol in that rubric; distinguish actual execution from a manual walkthrough.
+
 ### 10. Report and onboard the user
 
-Report:
+For a full Bootstrap, report:
 
 - Files created or changed
 - Existing sources reused and how they were classified
@@ -238,6 +249,8 @@ Report:
 - One concrete next-best source or fact to provide
 
 Explain how to resume incomplete onboarding. Do not describe suggestions, task-level plans, or external evidence as confirmed project decisions.
+
+For focused Repair, report the changed outcome, verification performed, and any material unresolved boundary. Do not repeat the full installation handoff or ask for a new source when the current task is already resolved.
 
 ## Completion standard
 

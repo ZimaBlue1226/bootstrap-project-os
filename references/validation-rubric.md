@@ -14,6 +14,20 @@
 
 ## Structural checks
 
+The script checks file presence, declarations, basic reference registration, placeholders, and placement signals. Its `status` is NOT a semantic verdict: JSON always reports `semantic_status: not_checked`. A `ready` marker is a project declaration, not an independently verified fact. Keep the automated result and manual review outcome separate in the handoff.
+
+### Reusing role owners
+
+Default filenames work without extra configuration. When a role already has a confirmed owner, declare only the overrides in one JSON comment in the local `AGENTS.md`; document its scope in the normal index as well. For example:
+
+```text
+<!-- project-os:role-map={"stable_context":"README.md","durable_decisions":"docs/adr-index.md"} -->
+```
+
+Supported keys are `collaboration_rules`, `stable_context`, `current_work`, `durable_decisions`, `artifact_navigation`, and `effective_history`. `AGENTS.md` remains the local collaboration/safety entry; other roles can map to project-relative files or HTTPS/HTTP source URLs. Omitted keys retain default paths. Local paths cannot traverse links/junctions, escape the project, or enter sensitive, archived or VCS locations. Do not put credentials in mappings. Directories are not file owners: use an ADR index, not the ADR directory itself.
+
+Shared files may own multiple roles when the sections and update boundaries are explicit; do not infer this from filenames. The grounding marker belongs in the mapped stable-context source; directory and scope markers belong in the mapped index. AGENTS must register the mapped source references, but registration alone does not prove a valid reading order. Verify the three-role default and conditional discovery manually. Mapped external owners are never fetched by the script and always produce automated `READY_WITH_GAPS`; separately report the manual access, scope and freshness review without changing that structural result. Do not create local competing copies just to silence it.
+
 - Every selected semantic role has exactly one declared authority.
 - The cold-start sequence points to real, readable files or explicit external sources.
 - Existing equivalent paths are documented.
@@ -113,7 +127,9 @@ or:
 
 ## Cold-start test
 
-Using only the documented entry sequence, answer:
+Using the default three-role entry sequence, answer purpose, stage, objective, scope, blockers, handoff, and update routing. For detailed authority, decision, asset or history questions below, follow the documented conditional route; knowing where to look is sufficient before that task is triggered. Do not load every source or duplicate detailed answers into the entry files merely to pass this test.
+
+Check these questions at the appropriate loading level:
 
 1. What is the project and why does it exist?
 2. What lifecycle stage is it in?
@@ -133,11 +149,31 @@ At `READY_WITH_GAPS`, the collaborator must be able to identify exactly which an
 
 Missing domain answers are acceptable only when the project genuinely lacks that domain or explicitly records the source as not yet registered.
 
+### Focused repair and behavioral regression
+
+For a status-only repair, verify the affected source and its directly relevant current references, the changed outcome, and the diff. Full inventory and unrelated domain acceptance are not required. Never treat the scenarios below as a mandatory interview with each project's user.
+
+When changing this skill, test in disposable synthetic projects with no live external writes. Supply raw inputs and inspect decisions and artifacts, not exact headings or phrase matches. Use meaningful fixture checks for deterministic scripts, and separately label manual walkthroughs versus independently executed agent trials.
+
+| Scenario input | Observable success | Failure to catch |
+|---|---|---|
+| New project with no assets yet | Real governance content; no speculative directories or fabricated decisions | Empty scaffold and predetermined multi-level tree |
+| Existing README and ADR index own roles | Reuse registered owners; unrelated code/work remains unchanged | Duplicate context or decision files |
+| User confirms feature released; old source says unimplemented | Current contradictory statuses reconciled within scope | Append completion yet retain pending status; invent test evidence |
+| User confirms a next-version plan | Plan and released baseline remain distinguishable | Future behavior written as current runtime |
+| User pauses an experiment | Removed from active blockers; restart boundary retained if useful | Claim access fixed or experiment permanently cancelled |
+| Partial answer covers two documents, user skips a minor detail | One confirmation updates both; skipped detail does not reappear as a question | Repeated interview or unrelated work blocked |
+| Known external source with current filters differing from an old note | Register direct source and scoped observation; do not overwrite desired contract | Re-ask for the source or equate a daily snapshot with full-cohort data |
+
+For ablation, run the same representative task with only default entry sources, then add the relevant domain source when needed. Keep unrelated history and other domains withheld. The reduced context must preserve answers about purpose, current goal, boundaries, source routing, and the correct update target; a history question should deliberately load history rather than guess. Compare unnecessary reads/questions and touched files as costs, without imposing universal character or file-count thresholds. A dry-run walkthrough is not evidence that another agent executed these behaviors successfully.
+
 ## Result states
 
 - **READY**: Structure is valid, core project facts are grounded, contamination and placement checks pass, and cold start is reliable.
 - **READY_WITH_GAPS**: Structure is valid and contamination checks pass, but core onboarding facts, source authority, or placement policy remain incomplete.
 - **INVALID**: Structural, safety, placeholder, contradictory-authority, or material contamination errors remain.
+
+These are final, reviewed readiness states. The script's similarly named structural status is only one input; report unresolved semantic review separately rather than upgrading a declared marker into factual verification.
 
 ## Severity
 

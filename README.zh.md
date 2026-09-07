@@ -63,8 +63,9 @@ current_work.md
 decision_log.md
 artifact_index.md
 changelog.md
-archive/README.md
 ```
+
+这是六类职责，不是强制新增六份重复文件。已有 README、ADR 索引或任务系统可以在权责明确时复用；只有实际使用归档时才创建 `archive/README.md`。
 
 常规冷启动顺序为：
 
@@ -72,31 +73,23 @@ archive/README.md
 AGENTS.md
 → project_context.md
 → current_work.md
-→ decision_log.md
-→ artifact_index.md
 ```
 
-只有需要了解已生效历史时才读取 `changelog.md`；只有当前任务涉及某个领域时才打开对应的详细事实源。
+定位来源时读 `artifact_index.md`，了解决策理由时读 `decision_log.md`，追溯历史时读 `changelog.md`；它们均按需加载。只有任务涉及某个领域时才打开对应详细事实源。明确映射的既有职责来源也遵循相同加载规则。
 
 物理目录结构是自适应的：优先保留项目已有且合理的约定。没有清晰规范时，skill 可以建议以下最小基线：
 
 ```text
-docs/product/requirements/
-docs/product/specifications/
-docs/technical/
-design/
-legal/
-qa/
-operations/
-workstreams/<事项名称>/
-research/
-assets/
-archive/background/
-archive/superseded/
-archive/external/
+docs/       # 已确认的领域事实源
+work/       # 活跃草稿、研究、计划与评审，默认平铺
+runbooks/   # 可复用的操作方法
+tools/      # 可复用的项目自动化与测试
+assets/     # 需保留的本地媒体或数据
+archive/    # 有独立历史价值的非当前材料
+.tmp/       # 一次性执行输出
 ```
 
-目录按需创建，只有出现真实资产时才建立。移动或归档既有资产前必须获得明确授权。
+上述目录均为可选，只有出现真实资产时才建立。子目录服务于实际权责、检索或多文件依赖，不为假设的流程阶段预建。保留 `spec/` 等既有合理命名。工作结束先将长期事实或方法更新到对应来源，再按授权清理失去用途的工作材料，不把所有完成事项都归档。移动或归档既有资产前必须获得明确授权。
 
 ---
 
@@ -114,6 +107,7 @@ bootstrap-project-os/
   scripts/
     inspect_project.py
     validate_project_os.py
+    tests/test_project_os.py
   references/
     governance-model.md
     project-adaptation.md
@@ -195,6 +189,8 @@ Onboarding 时，可以直接回答核心问题，也可以提供现成的 GitHu
 6. 建立或修复治理内核；
 7. 将结果校验为 `READY`、`READY_WITH_GAPS` 或 `INVALID`。
 
+局部 Repair 只读取受影响来源与相关指导，不扫描全项目、不重跑全部 Bootstrap 步骤。确认问题先围绕当前目标，合并同一结果的重复提问，尊重用户跳过的事项。已确认答案直接更新原权威文档并消除当前引用中的旧口径。计划、用户确认完成、独立测试通过分别表达；暂停工作不自动列为活跃阻塞。默认不新建追踪文档。
+
 ---
 
 ## 检查与校验
@@ -205,7 +201,7 @@ Onboarding 时，可以直接回答核心问题，也可以提供现成的 GitHu
 python scripts/inspect_project.py --root <项目根目录>
 ```
 
-检查器会跳过归档以及常见依赖、缓存、构建、大型资产和敏感区域，只报告路径和结构候选。
+检查器会跳过归档、临时输出、嵌套仓库、符号链接/目录联接，以及常见依赖、缓存、构建、大型资产和敏感区域，只报告路径和结构候选，不读取文件内容。
 
 校验已安装的 Project OS：
 
@@ -221,9 +217,19 @@ python scripts/validate_project_os.py --root <项目根目录> --json
 
 校验状态：
 
-- `READY`——结构、事实 grounding、来源边界、资产落位和冷启动均可用。
-- `READY_WITH_GAPS`——治理内核可用，但仍缺少项目事实或权威关系确认。
+- `READY`——自动结构检查通过且所需声明存在，不代表事实新鲜度或协作效率已经验证。
+- `READY_WITH_GAPS`——结构可用，但声明或映射的外部来源仍有待核对。
 - `INVALID`——仍存在结构、占位符、安全或事实边界错误。
+
+脚本明确返回 `semantic_status: not_checked`。宣布完整就绪前，仍需单独检查事实含义、生命周期一致性及实际冷启动行为。
+
+已有职责来源可以在 `AGENTS.md` 中声明映射，避免为了默认文件名新建副本：
+
+```html
+<!-- project-os:role-map={"stable_context":"README.md","durable_decisions":"docs/adr-index.md"} -->
+```
+
+未声明的职责保留默认路径。本地映射必须指向项目内安全的当前文件；HTTP(S) 外部来源不会被脚本抓取，而会留下核验缺口。支持的职责与审核要求见[校验规则](references/validation-rubric.md)。
 
 ---
 
@@ -253,7 +259,7 @@ python scripts/validate_project_os.py --root <项目根目录> --json
 
 ```bash
 python <skill-creator目录>/scripts/quick_validate.py .
-python scripts/validate_project_os.py --root <测试项目>
+python -B -m unittest discover -s scripts/tests -v
 ```
 
-重大改动应同时用“根目录混放的项目”和“已有成熟目录结构的项目”进行前向测试。测试通过后再提交并推送，保持已安装 skill 与私密仓库一致。
+自动测试用临时样例验证结构、职责复用、安全边界及命令行行为。重大改动还应按[校验规则](references/validation-rubric.md)进行行为场景与加载消融检查，覆盖新项目和已有成熟结构的项目。明确区分真实 Agent 实跑与人工走查，不用结构测试代替语义验证。只有用户明确授权时才提交或推送 Git。

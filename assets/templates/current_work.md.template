@@ -12,23 +12,13 @@
 
 ## Project-level workstreams
 
-| Workstream | Project-level status | Confirmed facts | Next milestone | Detailed source |
-|---|---|---|---|---|
-| {{WORKSTREAM}} | {{STATUS}} | {{FACTS}} | {{NEXT_MILESTONE}} | {{WORKSTREAM_SOURCE}} |
-
-## Registered work items
-
-| Work item | Type | Status source | Project-level relationship |
+| Direction | Current state or confirmed plan | Next outcome | Detailed source |
 |---|---|---|---|
-| {{WORK_ITEM}} | {{WORK_ITEM_TYPE}} | {{WORK_ITEM_SOURCE}} | {{WORK_ITEM_BOUNDARY}} |
+| {{WORKSTREAM}} | {{STATUS_AND_SCOPE}} | {{NEXT_MILESTONE}} | {{WORKSTREAM_SOURCE}} |
 
 ## Project-level blockers and decisions needed
 
 {{BLOCKERS_AND_DECISIONS}}
-
-## Onboarding gaps
-
-{{ONBOARDING_GAPS}}
 
 ## Handoff
 

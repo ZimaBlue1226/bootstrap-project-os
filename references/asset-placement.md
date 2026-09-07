@@ -66,26 +66,18 @@ project-root/
 ├─ decision_log.md
 ├─ artifact_index.md
 ├─ changelog.md
-├─ README.md                    # optional confirmed project-level overview
-├─ docs/                        # current domain truth
-│  ├─ product/
-│  │  ├─ requirements/
-│  │  └─ specifications/
-│  ├─ technical/
-│  ├─ design/
-│  ├─ legal/
-│  ├─ qa/
-│  └─ operations/
-├─ workstreams/                 # active initiatives and temporary delivery material
-├─ research/                    # exploration not yet promoted to current truth
-├─ assets/                      # local non-code assets when appropriate
-└─ archive/                     # non-authoritative history
-   ├─ background/
-   ├─ superseded/
-   └─ external/
+├─ docs/                        # maintained, confirmed domain sources
+├─ work/                        # active research, plans, reviews, delivery material
+├─ runbooks/                    # reusable conditional operating methods
+├─ tools/                       # reusable scripts and tests
+├─ assets/                      # local retained assets, when needed
+├─ archive/                     # non-current material with independent history value
+└─ .tmp/                        # disposable execution intermediates
 ```
 
-Do not create empty branches. A small project may start with only `docs/product/requirements/`, `workstreams/`, and `archive/background/` as real needs appear.
+The directories above are routing destinations, not an initialization checklist. Create each only with its first real asset; create `archive/README.md` only when the archive is used. Six governance roles are defaults for durable collaboration; reuse explicit existing role owners rather than producing duplicate files.
+
+Start `docs/` and `work/` shallow. Names and document content often suffice; introduce subdirectories for a real ownership/access boundary, a demonstrated retrieval problem, or multi-file dependencies. Research, review, and execution are often phases of the same work, not three separate destinations. Preserve established `spec/`, `research/`, `workstreams/`, code, test, or external-first conventions when their responsibilities are already clear. Do not mechanically rename them to this baseline.
 
 Code repositories keep tool-required structures such as `src/`, `tests/`, manifests, CI configuration, and framework directories. The Project OS supplements rather than replaces them.
 
@@ -106,21 +98,15 @@ Root placement alone never grants authority.
 
 | Asset | Default destination | Notes |
 |---|---|---|
-| Confirmed product requirement | `docs/product/requirements/<slug>.md` | Canonical product fact; tasks link to it |
-| Product or module specification | `docs/product/<module>/` or existing product source tree | Follow the project's established domain structure |
-| Architecture or protocol detail | `docs/technical/` or existing ADR/RFC location | Decisions point to detail rather than copy it |
-| Design guideline | `docs/design/` or external design system | Keep design authority at its actual source |
-| Legal or policy document | `docs/legal/` or external legal system | Respect access and sensitivity boundaries |
-| QA strategy or durable acceptance rule | `docs/qa/` | Live cases and results remain in the test tracker |
-| Operations runbook | `docs/operations/` | Runtime state remains in the operational system |
-| Active initiative plan | `workstreams/<initiative>/` | Does not define the whole-project stage |
-| Requirement draft | `workstreams/<initiative>/drafts/` or `research/` | Promote after confirmation |
+| Confirmed requirement, specification, architecture or durable QA rule | `docs/<topic>.md` or existing domain/ADR source | Split by actual ownership, not by synonymous document labels; live QA remains in its tracker |
+| Design or legal source | Existing external authority or `docs/` | Respect access boundaries; create domain subdivisions when justified |
+| Operations runbook | `runbooks/` or existing method source | Runtime state remains in the operational system |
+| Reusable script or test | `tools/` or existing engineering tool location | Not a prose rule or temporary output |
+| Active research, initiative plan, requirement draft or review | `work/<topic>.md` | Promote confirmed durable facts to their owner before retiring the work material |
 | One-off task acceptance criteria | Execution tracker | Avoid creating a competing requirement document |
-| Research or exploration | `research/` | Not current truth until promoted |
-| Background material | `archive/background/` | Non-authoritative |
-| Superseded current document | `archive/superseded/` | Preserve provenance and replacement pointer |
-| Retained external snapshot | `archive/external/` | Record origin and freshness |
-| Generated report or export | Registered output location | Record whether it is reproducible |
+| Background, superseded material or retained external snapshot | `archive/` or established history location | Retain only independent history value; record provenance and replacement where applicable |
+| Temporary script, upload copy or reproducible intermediate | `.tmp/` or existing temporary output area | Remove task-created unneeded files after verification within authorized cleanup scope |
+| Generated report with independent delivery/evidence value | Its content owner or registered output location | Reproducibility alone does not make evidence disposable |
 
 ## Existing-asset disposition
 
@@ -162,14 +148,14 @@ Example:
 
 ```text
 New confirmed requirement
-→ docs/product/requirements/<requirement>.md
+→ docs/<requirement>.md or existing domain source
 → register as product-domain authority
 → link relevant work items
 ```
 
 ```text
 New requirement draft
-→ workstreams/<initiative>/drafts/<requirement>.md
+→ work/<requirement>.md or existing work source
 → promote to the canonical requirements location only after confirmation
 ```
 
@@ -191,6 +177,10 @@ active workstream plan
 ```
 
 Do not archive merely because work is complete. Archive only when the material retains historical or background value. Delete or omit failed intermediate artifacts that have no continuing value, subject to user authorization.
+
+Define exit conditions together with placement: maintained facts are updated or superseded; active work promotes durable outcomes then retires; methods/tools remain while reusable; temporary output is cleaned once no longer needed; archives retain independent evidence rather than all completed work. Within the project's cleanup authorization, remove only known task-created paths with no remaining use. For older material, verify ownership, references, and actual use first; never infer disposability from extension, directory name, or absence from an index. Do not follow links/junctions during cleanup.
+
+Do not register every ephemeral intermediate or log cleanup as a substantive change. Migration disposition tables belong to the active migration source while useful, not permanently in the authority index. An execution being completed does not itself change the operating method or require a new runbook.
 
 ## External, large, generated, and sensitive assets
 

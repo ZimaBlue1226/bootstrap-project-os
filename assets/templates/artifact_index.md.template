@@ -18,9 +18,9 @@
 
 ## Project, domain, workstream, and task sources
 
-| Source | Scope | Owns | Must not determine | Authority basis | Lifecycle |
-|---|---|---|---|---|---|
-| {{SOURCE}} | {{SCOPE}} | {{OWNED_FACTS}} | {{NON_OWNED_FACTS}} | {{AUTHORITY_BASIS}} | {{LIFECYCLE}} |
+| Source | Scope | Owns | Must not determine | Authority basis | Lifecycle | Read when |
+|---|---|---|---|---|---|---|
+| {{SOURCE}} | {{SCOPE}} | {{OWNED_FACTS}} | {{NON_OWNED_FACTS}} | {{AUTHORITY_BASIS}} | {{LIFECYCLE}} | {{LOAD_TRIGGER}} |
 
 ## Directory and placement policy
 
@@ -28,12 +28,6 @@
 |---|---|---|---|
 | Project root | {{ROOT_CONTENTS}} | {{ROOT_EXCLUSIONS}} | {{ROOT_POLICY}} |
 | {{PLACEMENT_LOCATION}} | {{PLACEMENT_CONTENTS}} | {{PLACEMENT_EXCLUSIONS}} | {{PLACEMENT_LIFECYCLE}} |
-
-## Existing-asset dispositions
-
-| Current asset | Disposition | Target or retained location | Reason | Approval state |
-|---|---|---|---|---|
-| {{CURRENT_ASSET}} | {{DISPOSITION}} | {{TARGET_LOCATION}} | {{PLACEMENT_REASON}} | {{APPROVAL_STATE}} |
 
 ## External systems
 

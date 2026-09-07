@@ -20,9 +20,11 @@ Keep four categories distinct throughout bootstrap:
 | Discovered fact | Cite or point to the source; verify conflicts |
 | User-confirmed fact | May become current truth in the appropriate source |
 | Agent recommendation | Present as a proposal, never as project policy |
-| Unknown or disputed item | Put in current-work decisions/blockers or ask the user |
+| Unknown or disputed item | Keep in its scoped source or ask if material; only actual project-level dependencies enter current-work blockers |
 
 ## Safe inspection
+
+Initial Bootstrap and broad Audit need shallow discovery. A focused Repair with known sources starts at the project entry rules and affected sources, not another inventory. Reuse prior context only while relevant; reread current file contents before editing and expand scope when an actual conflict or missing dependency requires it.
 
 Begin with root and shallow directory metadata. Do not start with recursive content search.
 
@@ -130,6 +132,7 @@ Do not create empty directories. Do not recursively inspect archive contents; re
 - Personalize every created document with known project facts.
 - Keep unknowns explicit and centralized.
 - Do not leave placeholder tokens.
+- Remove template sections with no real continuing purpose instead of filling them with administrative busywork. Empty-state decision history can be honest and short; do not invent a decision to populate it.
 - Put only project-scope confirmed facts in stable context and current work.
 - Keep work-item status, stages, and choices in their work-item source.
 - Keep business workflow details out of `AGENTS.md`.

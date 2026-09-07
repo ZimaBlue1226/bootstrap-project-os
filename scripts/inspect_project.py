@@ -27,6 +27,8 @@ SKIP_DIRS = {
     ".next",
     ".nuxt",
     ".cache",
+    ".tmp",
+    "tmp",
     "__pycache__",
 }
 
@@ -58,6 +60,9 @@ PLACEMENT_DIR_NAMES = {
     "legal",
     "qa",
     "operations",
+    "runbooks",
+    "tools",
+    "work",
     "workstreams",
     "projects",
     "initiatives",
@@ -104,6 +109,7 @@ TECH_MARKERS = {
 
 SENSITIVE_SUFFIXES = {".pem", ".key", ".p12", ".pfx", ".jks", ".keystore"}
 SENSITIVE_NAMES = {
+    ".ssh",
     ".env",
     "credentials.json",
     "service-account.json",
@@ -146,6 +152,7 @@ def inspect(root: Path, max_depth: int) -> dict[str, Any]:
         "large_asset_candidates": [],
         "sensitive_path_candidates": [],
         "skipped_directories": [],
+        "nested_repositories": [],
         "root_entries": [],
     }
 
@@ -168,10 +175,19 @@ def inspect(root: Path, max_depth: int) -> dict[str, Any]:
                     {"path": rel, "type": "directory" if entry.is_dir(follow_symlinks=False) else "file"}
                 )
 
-            if entry.is_symlink():
+            if entry.is_symlink() or getattr(path, "is_junction", lambda: False)():
+                result["skipped_directories"].append(rel)
+                continue
+
+            if is_sensitive_name(entry.name):
+                result["sensitive_path_candidates"].append(rel)
                 continue
 
             if entry.is_dir(follow_symlinks=False):
+                if (path / ".git").exists():
+                    result["nested_repositories"].append(rel)
+                    result["skipped_directories"].append(rel)
+                    continue
                 if depth == 0 and lowered in PLACEMENT_DIR_NAMES:
                     result["placement_directory_candidates"].append(rel)
                 if lowered in ARCHIVE_DIR_NAMES:
@@ -198,10 +214,6 @@ def inspect(root: Path, max_depth: int) -> dict[str, Any]:
             if not entry.is_file(follow_symlinks=False):
                 continue
 
-            if is_sensitive_name(entry.name):
-                result["sensitive_path_candidates"].append(rel)
-                continue
-
             if lowered in GOVERNANCE_NAMES:
                 result["governance_candidates"].append(rel)
             if lowered in TECH_MARKERS:
@@ -226,6 +238,7 @@ def inspect(root: Path, max_depth: int) -> dict[str, Any]:
         "large_asset_candidates",
         "sensitive_path_candidates",
         "skipped_directories",
+        "nested_repositories",
     ):
         result[key] = sorted(set(result[key]), key=str.casefold)
     return result

@@ -63,8 +63,9 @@ current_work.md
 decision_log.md
 artifact_index.md
 changelog.md
-archive/README.md
 ```
+
+These are six responsibilities, not six mandatory duplicate files. Reuse an existing README, ADR index, or tracker when ownership is explicit. Create `archive/README.md` only when an archive is used.
 
 Its normal cold-start order is:
 
@@ -72,31 +73,23 @@ Its normal cold-start order is:
 AGENTS.md
 → project_context.md
 → current_work.md
-→ decision_log.md
-→ artifact_index.md
 ```
 
-`changelog.md` is read only when effective history matters. Detailed domain sources are opened only when the current task touches their scope.
+Read `artifact_index.md` to locate sources, `decision_log.md` for rationale, and `changelog.md` for history only when needed. Detailed domain sources are opened only when the current task touches their scope. Explicitly mapped equivalents follow the same loading rule.
 
 The physical project structure is adaptive. Existing coherent conventions are preserved. When no convention exists, the skill can propose a minimal baseline such as:
 
 ```text
-docs/product/requirements/
-docs/product/specifications/
-docs/technical/
-design/
-legal/
-qa/
-operations/
-workstreams/<initiative>/
-research/
-assets/
-archive/background/
-archive/superseded/
-archive/external/
+docs/       # Confirmed domain sources
+work/       # Active drafts, research, plans, and reviews; flat by default
+runbooks/   # Reusable operating methods
+tools/      # Reusable project automation and tests
+assets/     # Retained local media or data
+archive/    # Non-current material with independent historical value
+.tmp/       # Disposable execution outputs
 ```
 
-Directories are created lazily, only when a real asset needs them. Existing assets are moved or archived only after explicit authorization.
+All these directories are optional and created only when a real asset needs them. Add subdirectories for actual ownership, retrieval, or multi-file dependencies, not hypothetical stages. Existing coherent names such as `spec/` are preserved. On completion, promote lasting facts or methods to their owner, then remove authorized disposable work; do not archive everything. Existing assets are moved or archived only after explicit authorization.
 
 ---
 
@@ -114,6 +107,7 @@ bootstrap-project-os/
   scripts/
     inspect_project.py
     validate_project_os.py
+    tests/test_project_os.py
   references/
     governance-model.md
     project-adaptation.md
@@ -195,6 +189,8 @@ During onboarding, provide direct answers or point the skill at existing sources
 6. install or repair the governance kernel;
 7. validate the result as `READY`, `READY_WITH_GAPS`, or `INVALID`.
 
+A focused Repair reads the affected sources and relevant guidance, not the whole project or every Bootstrap step. Clarification starts with current goals, merges repeated questions about the same outcome, and respects skipped items. Confirmed answers update the existing owner and reconcile obsolete current references. Plans, user-confirmed completion, and independently tested results remain distinct; paused work is not automatically an active blocker. No new tracking document is required by default.
+
 ---
 
 ## Inspection and validation
@@ -205,7 +201,7 @@ Run the content-free structure inspector:
 python scripts/inspect_project.py --root <project-root>
 ```
 
-The inspector skips archives and common dependency, cache, build, large-asset, and sensitive areas. It reports paths and structural candidates without reading file contents.
+The inspector skips archives, temporary outputs, nested repositories, links/junctions, and common dependency, cache, build, large-asset, and sensitive areas. It reports paths and structural candidates without reading file contents.
 
 Validate an installed Project OS:
 
@@ -221,9 +217,19 @@ python scripts/validate_project_os.py --root <project-root> --json
 
 Validation states:
 
-- `READY` — structure, grounding, source boundaries, placement, and cold start are usable.
-- `READY_WITH_GAPS` — the kernel is usable, but project facts or authority mappings still need input.
+- `READY` — automated structural checks pass and required declarations are present; this does not establish factual freshness or effective collaboration.
+- `READY_WITH_GAPS` — structure is usable, but declarations or mapped external-source verification remain incomplete.
 - `INVALID` — structural, placeholder, safety, or authority-boundary errors remain.
+
+The script reports `semantic_status: not_checked`. Review source meaning, lifecycle consistency, and actual cold-start behavior separately before claiming full readiness.
+
+For existing role owners, an optional declaration in `AGENTS.md` avoids duplicate default files:
+
+```html
+<!-- project-os:role-map={"stable_context":"README.md","durable_decisions":"docs/adr-index.md"} -->
+```
+
+Unspecified roles keep their default paths. Local mappings must remain safe, current files within the project; external HTTP(S) owners are not fetched and produce a verification gap. See [validation rules](references/validation-rubric.md) for supported roles and review requirements.
 
 ---
 
@@ -253,7 +259,7 @@ After modifying the skill, run:
 
 ```bash
 python <skill-creator-dir>/scripts/quick_validate.py .
-python scripts/validate_project_os.py --root <test-project>
+python -B -m unittest discover -s scripts/tests -v
 ```
 
-Forward-test material changes against both an unstructured project and a project that already has a coherent directory system. Then commit and push so the installed package and private repository remain aligned.
+The automated suite uses disposable fixtures for structure, role reuse, safety boundaries, and CLI behavior. For material changes, also exercise the behavioral scenarios and loading ablation in [the validation rubric](references/validation-rubric.md), including a new project and an established structure. Distinguish executed agent trials from manual walkthroughs; structural tests do not prove semantic behavior. Commit or push only when explicitly authorized by the user.
