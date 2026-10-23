@@ -1,182 +1,72 @@
-# Project OS validation rubric
-
-## Contents
-
-1. Structural checks
-2. Grounding checks
-3. Contamination checks
-4. Placement checks
-5. Semantic checks
-6. Operational checks
-7. Cold-start test
-8. Result states
-9. Severity
+# Validate usefulness, not document ceremony
 
 ## Structural checks
 
-The script checks file presence, declarations, basic reference registration, placeholders, and placement signals. Its `status` is NOT a semantic verdict: JSON always reports `semantic_status: not_checked`. A `ready` marker is a project declaration, not an independently verified fact. Keep the automated result and manual review outcome separate in the handoff.
+Run `scripts/validate_project_os.py --root <project-root> --json` after structural changes. It reads declared role-owner files and writes nothing. It checks file presence, readability, placeholder replacement, source registration in AGENTS, and local path boundaries.
 
-### Reusing role owners
+The script reports `status: valid|invalid`, `structure_status: pass|fail`, and always `semantic_status: not_checked`. This replaces the old automated `ready|ready_with_gaps|invalid` status. Consumers must use the new structural meaning; a successful script never certifies source accuracy or collaboration behavior.
 
-Default filenames work without extra configuration. When a role already has a confirmed owner, declare only the overrides in one JSON comment in the local `AGENTS.md`; document its scope in the normal index as well. For example:
-
-```text
-<!-- project-os:role-map={"stable_context":"README.md","durable_decisions":"docs/adr-index.md"} -->
-```
-
-Supported keys are `collaboration_rules`, `stable_context`, `current_work`, `durable_decisions`, `artifact_navigation`, and `effective_history`. `AGENTS.md` remains the local collaboration/safety entry; other roles can map to project-relative files or HTTPS/HTTP source URLs. Omitted keys retain default paths. Local paths cannot traverse links/junctions, escape the project, or enter sensitive, archived or VCS locations. Do not put credentials in mappings. Directories are not file owners: use an ADR index, not the ADR directory itself.
-
-Shared files may own multiple roles when the sections and update boundaries are explicit; do not infer this from filenames. The grounding marker belongs in the mapped stable-context source; directory and scope markers belong in the mapped index. AGENTS must register the mapped source references, but registration alone does not prove a valid reading order. Verify the three-role default and conditional discovery manually. Mapped external owners are never fetched by the script and always produce automated `READY_WITH_GAPS`; separately report the manual access, scope and freshness review without changing that structural result. Do not create local competing copies just to silence it.
-
-- Every selected semantic role has exactly one declared authority.
-- The cold-start sequence points to real, readable files or explicit external sources.
-- Existing equivalent paths are documented.
-- Detailed canonical sources are indexed without being copied.
-- Large assets and sensitive paths are identified without exposing their contents.
-- Archive material is clearly marked non-authoritative.
-- Generated files contain no unresolved template placeholders.
-- Archive contents are excluded from ordinary source discovery.
-
-## Grounding checks
-
-- `project_context.md` contains exactly one grounding marker:
+Four roles have defaults: `collaboration_rules`, `stable_context`, `current_work`, and `artifact_navigation`. Existing owners can be registered in one optional JSON comment in AGENTS:
 
 ```text
-<!-- project-os:grounding-status=ready -->
+<!-- project-os:role-map={"stable_context":"README.md","current_work":"STATUS.md"} -->
 ```
 
-or:
+Only overrides are needed. Shared files are allowed when the sections and ownership are clear. `AGENTS.md` remains the local entry. Other roles may use project-relative files or HTTP/HTTPS URLs. External owners are registered but never fetched by this script; verify required access and scope separately.
 
-```text
-<!-- project-os:grounding-status=needs-input -->
-```
+The legacy keys `durable_decisions` and `effective_history` remain supported when explicitly mapped to a purposeful source. They are not default requirements. Remove mappings to retired logs during migration rather than creating empty replacement files.
 
-- `ready` requires confirmed project purpose, whole-project stage, immediate project objective, and sufficient project-level source authority.
-- `needs-input` preserves missing core facts explicitly and triggers `READY_WITH_GAPS`.
-- Every non-governance source has a declared scope and authority boundary.
-- The user can distinguish confirmed facts, ordinary evidence, agent recommendations, and unknowns.
+Local role paths may not escape the project, traverse links or junctions, or enter sensitive, archived, generated, or independent repository locations. The validator does not scan domain documents or recursively validate every link. Read the relevant sources and inspect affected links as part of the actual task.
 
-## Contamination checks
+Old grounding markers are optional declarations, not proof. Missing markers produce no warning. A malformed or contradictory supplied marker is an error; `needs-input` is a review item. The old task-boundary and placement markers are not required. Neither file length, root placement, a runbook pointer, nor the absence of a changelog proves a defect.
 
-- `AGENTS.md` contains cross-task collaboration rules and project-wide operational safeguards, not business workflow details.
-- `AGENTS.md` does not contain task stages, checklist IDs, feature requirements, launch steps, subscription plans, or similar domain execution content.
-- A task, checklist, issue, migration, launch, audit, or plan document is not the sole basis for project purpose, whole-project stage, immediate objective, or project decisions unless its project-level authority is explicit.
-- `current_work.md` does not promote a work-item stage into the whole-project stage.
-- `decision_log.md` does not promote task-level choices into project-level decisions.
-- `artifact_index.md` states what each non-governance source owns and must not determine.
+## Cold-start check
 
-## Placement checks
+Give a collaborator only the documented entry route and the authorized task. They should be able to explain:
 
-- `AGENTS.md` declares the confirmed root and future-asset placement policy.
-- `artifact_index.md` declares a directory map covering requirements, workstreams, research, generated outputs, background, and external sources as applicable.
-- The root contains only governance entry points, confirmed project-level anchors, and tool-required files, or explicitly justifies exceptions.
-- A new collaborator can determine where to create a confirmed requirement, draft requirement, active workstream plan, research note, generated report, and background document.
-- Existing misplaced assets have a confirmed disposition: keep, relocate, archive, externalize, or needs confirmation.
-- No empty directory exists solely to represent a hypothetical future domain.
-- Archive material is non-authoritative and not loaded during ordinary cold start.
-- Relocated assets have updated links, index entries, and substantive history.
+- What the project is for, its boundaries, and the next useful outcome.
+- Which facts are confirmed, proposed, observed, or unknown where that distinction matters.
+- Which source to read before changing a requirement, implementation, or runtime state.
+- What they can act on and what remains blocked by authority or access.
+- Where a new conclusion belongs and whether any entry route also needs updating.
 
-## Semantic checks
+Let them follow the index when a domain question arises. Do not load all history or copy domain detail into context to make the test easier.
 
-### Collaboration rules
+For cross-environment work, verify the branch and baseline, unsynchronized changes, independent repositories, unavailable assets or tools, and access assumptions. Do not infer environment readiness from the presence of a link.
 
-- Defines read-before-write behavior.
-- Defines cold-start order.
-- Defines update routing by meaning.
-- Defines how to handle incomplete context, conflicting sources, and sensitive material.
-- Does not contain volatile project status.
-- Defines the project-level versus task-level promotion boundary.
-- Defines root hygiene and future-asset placement without embedding domain content.
+## Change scenarios
 
-### Stable context
+Use the relevant scenarios, not an exhaustive interview or mandatory full suite for every repair.
 
-- Explains project purpose, current scope, stable constraints, and major modules or workstreams.
-- Points to detailed facts.
-- Does not accumulate task-level progress or historical narration.
+| Scenario | Observable result |
+|---|---|
+| New project without domain material | Grounded context and useful routes; no invented decisions, speculative directories, or empty logs |
+| Existing README, status board, ADRs, release notes | Reuse real owners; preserve distinct consumers and unrelated work |
+| Legacy logs duplicate current facts | Preserve unique rationale and evidence in the owner, repair references, retire redundant obligations within authorization |
+| Confirmed completion with old pending text | Reconcile current references; retain evidence limitations without calling the confirmed work unimplemented |
+| Confirmed next-version plan | Keep today's operation and future intent distinguishable |
+| Paused work or partial answer | Preserve the scope; do not invent a blocker or restart repeated questioning |
+| Unavailable external authority | Report the access boundary; finish independent changes without promoting a stale export |
+| Dirty checkout or independent repository | Preserve work and ownership; do not claim synchronization or publish without authorization |
+| Domain rule changes with stable goal and sources | Change its owner; leave unrelated context, handoff, and navigation alone |
+| Historical rationale is needed | Follow the registered source or version history; do not invent it from current text |
 
-### Current work
+## Test the skill itself
 
-- States current stage, immediate objective, workstream status, blockers, decisions needed, and handoff.
-- Avoids duplicating live issue, QA, owner, build, or test-case ledgers.
-- Removes completed work that no longer affects the current stage.
+Run deterministic tests for scripts and realistic behavior trials for material instruction changes. Keep those forms of evidence separate. Script tests should observe behavior, such as preservation of files, rejection before sensitive reads, correct role reuse, and failure on a missing owner. Do not test exact prose or preferred headings.
 
-### Durable decisions
+For a substantial refactor, use an independent subagent evaluation when delegation is available and authorized. Give it the skill, a realistic request, and minimal raw artifacts in an isolated temporary project. Withhold the intended answer, suspected defects, and proposed fixes. Keep live external writes out of the evaluation. Inspect its actual actions and outputs, then correct only demonstrated material failures.
 
-- Contains only confirmed, long-lived choices.
-- Records rationale, impact, reversal conditions, and detailed source.
-- Keeps technical or product detail in the domain source.
+Test both an unstructured project and an established project. For cold-start testing, begin with entries only and allow the documented conditional reads. Compare correct outcomes, unnecessary questions, unrelated reads, and touched files. There is no universal target for character counts or number of files.
 
-### Artifact navigation
+## Reviewed outcome and stopping rule
 
-- Identifies current, historical, external, large, sensitive, and archived artifacts.
-- Describes scope, owned facts, non-owned facts, authority, lifecycle, and physical placement without duplicating content or live progress.
+Human-readable outcomes after semantic review:
 
-### Effective history
+- **READY**: The authorized scope has usable owners and routes, supported current conclusions, and a working cold start.
+- **READY_WITH_GAPS**: Useful work can continue, but identified material facts or access still prevent a complete handoff.
+- **INVALID**: A broken route, material contradiction, information loss, unsafe read or write, or unsupported authority change remains.
 
-- Records substantive changes in reverse chronological order.
-- Excludes pure discussion, formatting-only edits, and failed intermediate attempts.
+State the tested scope and limitations. Merely registering an external URL is not a successful read. A walkthrough is not an independently executed trial.
 
-## Operational checks
-
-- A collaborator can tell where to write a new fact before editing.
-- A normal task does not require updating every governance file.
-- External sources have clear authority and local-summary boundaries.
-- Existing user files and worktree changes were preserved.
-- No credentials or sensitive contents were read, copied, or logged.
-- No code, Git, remote system, or deployment state changed outside the user's request.
-
-## Cold-start test
-
-Using the default three-role entry sequence, answer purpose, stage, objective, scope, blockers, handoff, and update routing. For detailed authority, decision, asset or history questions below, follow the documented conditional route; knowing where to look is sufficient before that task is triggered. Do not load every source or duplicate detailed answers into the entry files merely to pass this test.
-
-Check these questions at the appropriate loading level:
-
-1. What is the project and why does it exist?
-2. What lifecycle stage is it in?
-3. What is the immediate objective?
-4. What is in scope and out of scope?
-5. Where are product, technical, operational, legal, design, QA, and code truths?
-6. What durable decisions are settled?
-7. What is blocked or awaiting a decision?
-8. What can a new collaborator pick up next?
-9. Which assets are large, generated, sensitive, historical, or external?
-10. Where should each likely future change be recorded?
-11. Where should each likely new asset be physically created?
-
-At `READY`, failure to answer questions 1–4 or 10 is a governance failure.
-
-At `READY_WITH_GAPS`, the collaborator must be able to identify exactly which answers are unknown, why they were not inferred, which source or user confirmation would resolve them, and which safe work can continue.
-
-Missing domain answers are acceptable only when the project genuinely lacks that domain or explicitly records the source as not yet registered.
-
-### Focused repair and behavioral regression
-
-For a status-only repair, verify the affected source and its directly relevant current references, the changed outcome, and the diff. Full inventory and unrelated domain acceptance are not required. Never treat the scenarios below as a mandatory interview with each project's user.
-
-When changing this skill, test in disposable synthetic projects with no live external writes. Supply raw inputs and inspect decisions and artifacts, not exact headings or phrase matches. Use meaningful fixture checks for deterministic scripts, and separately label manual walkthroughs versus independently executed agent trials.
-
-| Scenario input | Observable success | Failure to catch |
-|---|---|---|
-| New project with no assets yet | Real governance content; no speculative directories or fabricated decisions | Empty scaffold and predetermined multi-level tree |
-| Existing README and ADR index own roles | Reuse registered owners; unrelated code/work remains unchanged | Duplicate context or decision files |
-| User confirms feature released; old source says unimplemented | Current contradictory statuses reconciled within scope | Append completion yet retain pending status; invent test evidence |
-| User confirms a next-version plan | Plan and released baseline remain distinguishable | Future behavior written as current runtime |
-| User pauses an experiment | Removed from active blockers; restart boundary retained if useful | Claim access fixed or experiment permanently cancelled |
-| Partial answer covers two documents, user skips a minor detail | One confirmation updates both; skipped detail does not reappear as a question | Repeated interview or unrelated work blocked |
-| Known external source with current filters differing from an old note | Register direct source and scoped observation; do not overwrite desired contract | Re-ask for the source or equate a daily snapshot with full-cohort data |
-
-For ablation, run the same representative task with only default entry sources, then add the relevant domain source when needed. Keep unrelated history and other domains withheld. The reduced context must preserve answers about purpose, current goal, boundaries, source routing, and the correct update target; a history question should deliberately load history rather than guess. Compare unnecessary reads/questions and touched files as costs, without imposing universal character or file-count thresholds. A dry-run walkthrough is not evidence that another agent executed these behaviors successfully.
-
-## Result states
-
-- **READY**: Structure is valid, core project facts are grounded, contamination and placement checks pass, and cold start is reliable.
-- **READY_WITH_GAPS**: Structure is valid and contamination checks pass, but core onboarding facts, source authority, or placement policy remain incomplete.
-- **INVALID**: Structural, safety, placeholder, contradictory-authority, or material contamination errors remain.
-
-These are final, reviewed readiness states. The script's similarly named structural status is only one input; report unresolved semantic review separately rather than upgrading a declared marker into factual verification.
-
-## Severity
-
-- **Error**: Missing required role, broken cold-start path, unresolved placeholder, secret exposure, destructive overwrite, contradictory source ownership, invalid grounding marker, or confirmed task-to-project contamination.
-- **Warning**: Missing grounding or placement marker in a legacy installation, overlong snapshot, thin artifact metadata, unclear external-source freshness, incomplete handoff, suspicious domain-source references in `AGENTS.md`, ordinary documents at the root needing placement review, or a role that may soon need splitting.
-- **Suggestion**: Optional refinement that does not block reliable collaboration.
+Fix issues that can change an action or conclusion. Treat aesthetic preferences as optional. Stop when the intended outcome and relevant checks pass; do not add work to eliminate every possible future concern.

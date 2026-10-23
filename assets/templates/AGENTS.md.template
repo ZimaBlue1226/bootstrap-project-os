@@ -1,89 +1,29 @@
 # {{PROJECT_NAME}} collaboration rules
 
-This file is the cross-agent source of truth for collaboration, safety, and update routing. Project and business facts live in the sources registered by `artifact_index.md`.
+Read this entry, then `project_context.md` and `current_work.md`. Use `artifact_index.md` when locating sources or assets, then read only the domain material required by the task. Equivalent existing owners may replace these names when explicitly mapped.
 
-<!-- project-os:task-boundary=declared -->
-<!-- project-os:asset-placement=declared -->
+## Act on current sources
 
-## Cold start
+Read the responsible source before editing. Separate confirmed rules, proposals, observed behavior, and unknowns. A task's status does not define the whole project. Preserve material conflicts and resolve only those that affect the authorized action.
 
-Before acting in a new session, read:
+{{GIT_AND_COORDINATION_POLICY}}
 
-```text
-AGENTS.md
-→ project_context.md
-→ current_work.md
-```
+## Maintain the current account
 
-Read `artifact_index.md` when locating sources, `decision_log.md` when decision rationale matters, and `changelog.md` when history matters. Open domain sources only when the task touches their scope. Reuse explicitly mapped equivalents where the project already has role owners.
+Update the responsible source in place, retaining relevant reasons, boundaries, exceptions, and evidence. Reconcile affected current references and remove superseded passages. A confirmed plan, delivered document, accepted change, tested implementation, and deployed behavior remain distinct.
 
-## Source roles
+- Stable identity and principles belong in `project_context.md`.
+- Goals, blockers, and next actions belong in `current_work.md`; execution detail stays in its system.
+- Source ownership and locations belong in `artifact_index.md`.
+- Cross-task collaboration rules belong here; reusable procedures belong in their method source.
+- Decisions and rationale accompany the facts they explain. Edit history belongs in Git or the owning system.
 
-```text
-Collaboration and safety rules       → AGENTS.md
-Stable confirmed project truth       → project_context.md
-Project-level progress and blockers  → current_work.md
-Durable confirmed project decisions  → decision_log.md
-Artifact and source navigation       → artifact_index.md
-Effective substantive history        → changelog.md
-Detailed domain facts                → sources registered in artifact_index.md
-Task, checklist, issue, and QA status → corresponding execution source
-Non-authoritative reference/history  → archive/
-```
+Update entries only when their responsibility changed. Preserve purposeful release notes or ADRs; do not create generic logs or recurring summaries without a distinct need. Discussion-only requests do not authorize writes.
 
-## Read and change safely
-
-- Read the source that owns a fact before editing it.
-- Preserve existing work and unrelated changes.
-- Separate user-confirmed facts, source evidence, recommendations, and unknowns.
-- Distinguish confirmed plans from released behavior, and business completion from independently verified evidence. User-confirmed completion must not remain "unimplemented" merely because tests were not inspected; do not invent those tests either.
-- Do not infer confirmed requirements, decisions, ownership, approvals, or project scope.
-- Do not read or expose secrets. Do not recursively inspect large or generated assets.
-- If sources conflict, stop the conflicting change, identify both sources, and request resolution.
-- If required context cannot be read, do not modify affected critical material.
-
-## Route updates by meaning
-
-```text
-Stable project state or constraint    → project_context.md or its domain source
-Current project objective or blocker  → current_work.md
-Durable confirmed project choice      → decision_log.md, pointing to detail
-Detailed requirement or design        → its registered domain source
-Task, checklist, issue, or test status → its registered execution source
-Effective substantive change          → changelog.md
-Artifact lifecycle or navigation      → artifact_index.md
-Reusable collaboration safeguard      → AGENTS.md
-Reusable scenario-specific method     → existing runbook or method source
-Executable automation or tests        → existing tool/script source
-Background or superseded material     → archive/
-```
-
-Update only files whose owned facts changed. Pure discussion, rejected drafts, and formatting-only edits normally do not enter governance history.
-
-Within an authorized update, reconcile the owning source and directly relevant current references in the same turn; remove contradictory old statuses rather than appending another competing account. Keep historical statements time-scoped. Independent confirmed changes need not wait for unrelated missing details. Do not treat discussion-only requests as authorization to write.
-
-Current work contains current priorities, not all historical pending items. Completed work exits active milestones; paused work is not an active blocker. Ask about real current outcomes before reviving old review labels, merge duplicate questions, and respect skipped items unless they block safe execution.
-
-## Project-level and work-item boundary
-
-- A Checklist, Task, Todo, Issue, plan, launch guide, migration note, or other work-item document owns only its declared scope.
-- A work-item stage is not the whole-project stage. A work-item choice is not a project decision.
-- Promote a work-item fact only when the user or an explicitly canonical project-level source confirms its broader scope.
-- Do not place business workflow details, task stages, checklist IDs, feature rules, or domain plans in this file.
-
-## Asset placement
-
-- Reserve the project root for governance entry points, confirmed project-level anchors, and tool-required files.
-- Follow the detailed directory map in `artifact_index.md`.
-- Place new assets automatically when their role and destination are unambiguous.
-- Do not create empty directories for hypothetical future needs.
-- Create persistent material only for a distinct continuing purpose not served by an existing source. Promote reusable outcomes before retiring working material; archive only independent historical value.
-- Place temporary execution files in the existing temporary area. Clean known task-created files after verification within the project's authorization; check ownership and use before removing older files, without following links or junctions. Do not turn ephemeral cleanup into index or changelog entries.
-- Do not copy external canonical sources locally merely to fit the directory structure.
-- Ask before moving, renaming, deleting, or archiving existing assets unless the user already approved the exact placement preview.
+## Files and access
 
 {{ASSET_PLACEMENT_RULES}}
 
-## Cross-project operating rules
+Preserve unrelated work. Identify credentials by path without reading them. Load large assets only at required registered paths. Before moving or retiring content, check use, references, unique information, and recovery. Uncommitted content is not guaranteed by Git history.
 
-{{CROSS_PROJECT_OPERATING_RULES}}
+Use the current environment's paths, shell, and encoding. Reread changed sources and inspect the diff before delivery. State what was tested and where unsynchronized work remains.

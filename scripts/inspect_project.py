@@ -127,7 +127,7 @@ def is_sensitive_name(name: str) -> bool:
     lowered = name.casefold()
     return (
         lowered in SENSITIVE_NAMES
-        or lowered.startswith(".env.")
+        or lowered.startswith(".env")
         or Path(lowered).suffix in SENSITIVE_SUFFIXES
         or "credential" in lowered
         or "secret" in lowered

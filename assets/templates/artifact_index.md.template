@@ -1,48 +1,21 @@
-# {{PROJECT_NAME}} artifact index
+# {{PROJECT_NAME}} sources
 
-> Navigation map for authoritative, current, work-item, historical, external, large, generated, and sensitive artifacts. This file does not duplicate their contents or live progress.
+Read by task scope. Location and filenames do not confer authority.
 
-<!-- project-os:source-scope-map=declared -->
-<!-- project-os:directory-map=declared -->
+## Responsible sources
 
-## Governance entry points
-
-| Artifact | Purpose | Authority or lifecycle |
+| Source | Owns and when to read | Status, limits, and access |
 |---|---|---|
-| `AGENTS.md` | Collaboration and safety rules | Current |
-| `project_context.md` | Stable confirmed project-level context | Current |
-| `current_work.md` | Project-level progress and handoff | Current |
-| `decision_log.md` | Confirmed project-level decision summaries | Current |
-| `artifact_index.md` | This navigation map | Current |
-| `changelog.md` | Effective substantive history | Current |
+| {{SOURCE}} | {{RESPONSIBILITY_AND_TRIGGER}} | {{AUTHORITY_SCOPE_AND_ACCESS}} |
 
-## Project, domain, workstream, and task sources
+## Local material and assets
 
-| Source | Scope | Owns | Must not determine | Authority basis | Lifecycle | Read when |
-|---|---|---|---|---|---|---|
-| {{SOURCE}} | {{SCOPE}} | {{OWNED_FACTS}} | {{NON_OWNED_FACTS}} | {{AUTHORITY_BASIS}} | {{LIFECYCLE}} | {{LOAD_TRIGGER}} |
+{{USEFUL_LOCAL_SOURCES_AND_ASSET_LOCATIONS}}
 
-## Directory and placement policy
+## Placement and lifecycle
 
-| Location or external system | Intended contents | Must not contain | Lifecycle or placement rule |
-|---|---|---|---|
-| Project root | {{ROOT_CONTENTS}} | {{ROOT_EXCLUSIONS}} | {{ROOT_POLICY}} |
-| {{PLACEMENT_LOCATION}} | {{PLACEMENT_CONTENTS}} | {{PLACEMENT_EXCLUSIONS}} | {{PLACEMENT_LIFECYCLE}} |
+{{PLACEMENT_POLICY_OR_POINTER_TO_ITS_OWNER}}
 
-## External systems
+## Historical retrieval
 
-| System or source | Identifier or URL | Scope and authority | Access assumptions | Local-summary boundary |
-|---|---|---|---|---|
-| {{EXTERNAL_SOURCE}} | {{EXTERNAL_IDENTIFIER}} | {{EXTERNAL_AUTHORITY}} | {{ACCESS_ASSUMPTIONS}} | {{LOCAL_SUMMARY_BOUNDARY}} |
-
-## Large or generated assets
-
-{{LARGE_ASSETS}}
-
-## Sensitive locations
-
-{{SENSITIVE_LOCATIONS}}
-
-## Historical and archived material
-
-{{ARCHIVED_MATERIAL}}
+{{VERSION_HISTORY_OR_EXISTING_RETENTION_SOURCE}}

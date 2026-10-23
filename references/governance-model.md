@@ -1,189 +1,68 @@
-# Reusable project-governance model
+# Project collaboration model
 
-## Contents
+## What the system must accomplish
 
-1. Core principles
-2. Promotion firewall
-3. Logical and physical routing
-4. Semantic roles
-5. Lifecycle routing
-6. Source authority
-7. Scaling rules
-8. Common failure modes
+Agents lose conversational context, work in different environments, and encounter sources that change independently. A durable project needs a small amount of maintained state that lets the next collaborator make the correct decision without replaying history.
 
-## Core principles
+Judge a document by the decision it enables. Keep it when it has a continuing owner and purpose. A new document adds another place to search, update, and reconcile, so reuse an existing owner before creating one.
 
-### Separate state, work, decisions, history, and navigation
+The useful optimization is reliable continuation with low reading and maintenance cost. Shortness alone is not success: deleting the reason for a constraint can make a concise document misleading.
 
-These information types change at different rates and answer different questions. Keep them in separate semantic roles even when a very small project combines two roles into one file.
+## Project structure
 
-### Maintain one authoritative source per fact
+| Layer | Responsibility | Typical owner |
+|---|---|---|
+| Collaboration | How to obtain context, act, coordinate, and update | Agent rules |
+| Project context | Why the project exists, its scope and stable constraints | Context or an existing project overview |
+| Handoff | What matters next and what prevents progress | Current work or an existing status source |
+| Navigation | Where each relevant truth lives and when to read it | Source index |
+| Domain facts | Requirements, design, architecture, policy, methods | The registered domain document or system |
+| Implementation and operation | Code, execution status, configuration, observed behavior | Repository, tracker, or runtime system |
+| History | What changed and the historical versions | Git or the owning system's version history |
 
-A summary or index may point to a detailed source but must not become a competing copy. When two files disagree, explicitly select the authority or leave the conflict unresolved for a human decision.
+These are responsibilities, not a required file tree. Four entry roles usually route to everything else. An existing README or tracker can serve a role; a small project can combine roles in clearly owned sections. Keep the cold-start route explicit.
 
-### Optimize for cold starts and handoffs
+## Authority is scoped
 
-A new collaborator should learn the project by following a short documented sequence rather than recursively searching the repository or relying on chat history.
+For a material claim, establish its subject and scope, its confirmation or observation basis, and whether it describes a current rule, a proposal, implementation, or observed operation. Use these dimensions to reason; do not impose a metadata table on every paragraph.
 
-### Route changes by meaning
+There is no universal ranking in which runtime, code, or a newer document overrides all other sources. A runtime observation can demonstrate a requirement violation without changing the requirement. A user can confirm deployment without supplying independent test evidence. Preserve both the confirmed state and the limits of the evidence.
 
-Update a document because its owned fact changed, not because its filename was mentioned. Most tasks should affect only one or two governance files.
+Only confirmed project-level facts belong in stable context. A task's phase, checklist, or detailed requirement stays with that task or domain. A document's size, filename, date, or polish does not confer wider authority.
 
-### Preserve uncertainty
+External canonical sources remain external. Register a direct reference, responsibility, relevant access boundary, and any observation date needed to interpret a snapshot. Read their current content before editing. An unavailable source remains unavailable; an old local export does not acquire its authority.
 
-Label proposals, inferred facts, unverified statements, and pending decisions. Do not rewrite them as settled truth.
+## Maintenance by responsibility
 
-## Promotion firewall
-
-Classify a fact independently by scope, authority, and time horizon before routing it.
-
-| Dimension | Values |
+| Change | Destination |
 |---|---|
-| Scope | Project, domain/module, workstream, task/checklist, reference/archive, unknown |
-| Authority | User-confirmed, explicitly canonical, source-declared, external runtime, ordinary evidence, inferred/proposed, disputed |
-| Time horizon | Stable, current project work, execution detail, durable decision, effective history |
+| Stable project identity or principle | Context, with detailed rules in their domain source |
+| Requirement, architecture, design, or policy | Its existing responsible source |
+| Confirmed choice and its still-relevant rationale | Beside the rule it explains, or an existing purposeful ADR |
+| Goal, blocker, or handoff | Current work, only to the extent needed for the next action |
+| Owner, source, or path changes | Source index and affected references |
+| Cross-task collaboration rule | Agent rules |
+| Repeatable scenario-specific method | Existing runbook or method source |
+| Automation or test behavior | Tool or code source |
+| Detailed progress, assignee, or test case | Execution system |
+| Edit history | Git or the owning system's version history |
 
-Use these minimum gates:
+For an authorized change, read the current owner, update its conclusion in place, reconcile directly relevant current references, and inspect the result. Keep context, dependencies, exceptions, and rationale that still affect action. Remove superseded explanations, repetitions, and temporary discussion. Historical claims may remain where useful, with their original scope and date.
 
-```text
-Stable project truth = project scope + confirmed authority + stable horizon
-Current project work = project scope + confirmed authority + current-project horizon
-Project decision     = project scope + explicit confirmation + durable choice
-Cross-agent rule     = cross-task collaboration or project-wide operational safeguard
-```
+Current work is a handoff, not the union of every old pending item. Completed items leave it when they no longer affect the next action. Paused work retains a restart condition only when useful. Partial completion closes only the confirmed scope. A skipped question stays unknown without becoming an invented blocker.
 
-A document's filename, detail, recency, polish, or uniqueness does not establish project-level authority. Treat a Checklist, Task, Todo, Issue, plan, launch guide, migration note, and similar artifact as task-scoped until its broader ownership is explicitly confirmed.
+Separate delivered documentation, accepted design, merged code, tested behavior, and deployed operation. A future plan can coexist with today's baseline if the version boundary is clear.
 
-If a gate fails, keep the fact in its existing source, index its boundary, or preserve it as an onboarding gap. Do not promote it.
+## Decisions and history
 
-## Logical and physical routing
+A future collaborator usually needs the current rule and why it applies. Keep those together. Git records edits but does not automatically contain the reasoning behind a choice; migrate useful rationale into the owner before retiring a decision log.
 
-Every material asset needs two independent routes:
+Default to version history for change retrieval. Add a separate record only for a real consumer or obligation, such as user-facing release notes, a maintained ADR process, a regulatory record, or an external action without an adequate audit trail. Keep external operation evidence in the responsible source or existing handoff when it affects continuation. Do not record every action in a universal project ledger.
 
-```text
-Logical route  = which facts the asset owns
-Physical route = where the asset lives
-```
+## Boundaries and growth
 
-Correct logical authority does not guarantee correct placement. A background document at the root can appear project-critical even when `artifact_index.md` labels it non-authoritative.
+Start with existing sources. Split a document when distinct responsibilities repeatedly change independently or a real retrieval problem prevents use. Create directories only for actual content and group files when dependencies, ownership, or access require it.
 
-Use the project's existing coherent structure when possible. Otherwise apply the minimal baseline in `asset-placement.md`. Reserve the root for governance entry points, confirmed project-level anchors, and tool-required files.
+Use agent rules for cross-task constraints, runbooks for conditional procedures, and tools for repeatable actions. A one-off execution does not justify additions to all three.
 
-After the user confirms the placement policy:
-
-- Route new assets automatically when their role is unambiguous.
-- Ask only when multiple destinations are plausible or authority would change.
-- Require authorization before moving, renaming, deleting, or archiving existing assets.
-- Update links, the artifact index, and effective history after relocation.
-
-## Semantic roles
-
-| Role | Answers | Default path | Must not become |
-|---|---|---|---|
-| Collaboration rules | How should agents and collaborators operate safely across tasks? | `AGENTS.md` | Business workflow, task status, project history, or domain specification |
-| Stable context | What is the project now? | `project_context.md` | Changelog or task board |
-| Current work | What matters now, what is next, and what is blocked? | `current_work.md` | Detailed issue or QA ledger |
-| Durable decisions | What important choices are settled, why, and when may they be revisited? | `decision_log.md` | Full architecture or requirements spec |
-| Artifact navigation | Where are authoritative, current, historical, external, large, and sensitive artifacts? | `artifact_index.md` | A duplicate of artifact contents |
-| Effective history | What substantive changes have taken effect? | `changelog.md` | Discussion transcript or future plan |
-| Detailed facts | What are the product, technical, legal, design, data, QA, or operational rules? | Project-specific | A second governance layer |
-| Non-authoritative archive | What old, background, reference, or process material remains useful? | `archive/` | A source of current truth |
-
-Default filenames are conventions, not mandatory authorities. Existing ADRs, roadmaps, READMEs, wikis, issue trackers, design systems, and specifications may fulfill a role.
-
-For every non-governance source, record both what it owns and what it must not determine. This negative boundary prevents a valid task or domain source from silently becoming a project-wide authority.
-
-## Lifecycle routing
-
-### Business state and evidence are independent
-
-Business state can be proposed, planned, in progress, released/completed, paused, or superseded. Evidence may be a user confirmation, a dated document, or a scoped runtime/test observation. These are reasoning dimensions, not mandatory new tables in every project.
-
-- A confirmed plan does not replace the released baseline as implemented behavior; identify the intended version or scope when they coexist.
-- User-confirmed completion replaces an obsolete "not implemented" claim within the confirmed scope. Lack of independently inspected tests does not make the work unfinished again, and completion does not invent tests, approvals, resource IDs, or configuration details.
-- Paused work leaves active milestones and blockers; keep a short restart condition only when useful. Paused does not mean the fault was fixed or the work was abandoned permanently.
-- A document's lifecycle is separate from the product's status. Finishing a review copy does not approve the product; releasing a feature does not make its maintained specification an archive.
-- Runtime evidence describes actual behavior within its observed scope, period, and filters. A specification may own intended behavior. Do not resolve this difference by silently turning either into the other.
-
-### Reconcile rather than accumulate
-
-Within an authorized update: identify what the new confirmation actually covers → update the owning source → inspect directly relevant current references for contradictory old states → remove or qualify those states → retain historical records with their time boundaries → verify the diff.
-
-Do not add a new completion paragraph while leaving the same feature "pending" in the current table. Do not scan or rewrite unrelated domains, create a separate tracking document merely to restate completion, or carry closed items indefinitely in current work. Partial confirmation closes only the covered portion; the remainder stays explicit without becoming an invented project blocker.
-
-| Change type | Primary destination |
-|---|---|
-| Stable identity, scope, capability, constraint, or current operating model | Stable context or detailed canonical source |
-| Project phase, current objective, milestone, blocker, or handoff | Current work |
-| Confirmed long-lived choice with alternatives or reversal conditions | Durable decision log, pointing to detail |
-| Detailed requirement, architecture, protocol, design, policy, or acceptance rule | Domain-specific canonical source |
-| Effective substantive change | Changelog |
-| Artifact created, replaced, deprecated, relocated, or reclassified | Artifact index |
-| Reusable cross-task safety or collaboration lesson | Collaboration rules |
-| Reusable scenario-specific operation or recovery method | Existing runbook or equivalent method source |
-| Executable automation or tests | Existing tool/script source; update method instructions only if usage changed |
-| Active research, draft or review | Existing work source; `work/` when no convention exists |
-| Superseded design, background, reference, or completed research with independent historical value | Non-authoritative archive |
-| Routine issue, bug, test case, owner, live status, or build-specific note | The project's execution tracker |
-| Pure discussion, failed experiment, or rejected draft with no continuing value | Usually nowhere; archive only when future reference is justified |
-
-Recommended decision order:
-
-```text
-Identify the owned fact
-→ update its canonical source
-→ check whether current stage changed
-→ check whether a durable decision formed
-→ check whether artifact navigation changed
-→ record the effective change if substantive
-```
-
-## Source authority
-
-Use this precedence model unless the project defines another:
-
-1. Runtime or production state explicitly designated as authoritative
-2. Domain-specific canonical source
-3. Durable decision record pointing to that source
-4. Stable project snapshot
-5. Current-work snapshot
-6. Artifact index
-7. Changelog
-8. Archive, chat, and third-party summaries
-
-Precedence does not make a lower layer useless. It defines how to resolve disagreement.
-
-External systems can be authoritative. Record their URL or identifier, scope, access assumptions, and what local files may summarize them. Never silently replace an external source with a stale local copy.
-
-## Scaling rules
-
-- Start with the semantic roles needed for unambiguous handoff.
-- Use the default full family for long-lived, multi-module, regulated, asset-heavy, or multi-collaborator projects.
-- Reuse existing files when their ownership is already clear.
-- Split a file when it repeatedly mixes facts with different owners or change rates.
-- Add a wiki or retrieval layer only after source authority and lifecycle routing are stable.
-- Keep execution details in the system where work actually happens; link rather than duplicate.
-- Before creating persistent material, ask whether it has an independent continuing purpose not served by an existing source. Otherwise update that source or keep the discussion in the conversation. An index is navigation, not a migration ledger; current work is not a registry of all tasks.
-- Rules define cross-task boundaries, runbooks define conditional methods, and tools implement actions. A completed execution alone does not justify a new rule or runbook.
-
-## Common failure modes
-
-- One context file contains project identity, active tasks, decisions, file inventory, and history.
-- A roadmap and current-work file both claim the same milestone status.
-- A decision log contains full specifications that later drift.
-- An artifact index contains live review progress or issue counts.
-- A changelog records every edit, typo, and abandoned experiment.
-- An archive is treated as current truth.
-- Empty template files create the appearance of governance without usable context.
-- Project-specific preferences are presented as universal governance rules.
-- An agent infers owners, approvals, requirements, or business conclusions without confirmation.
-- The only or largest document is treated as the project charter without confirming its scope.
-- A work-item stage is copied into current work as the whole-project stage.
-- Task-level choices are copied into the project decision log.
-- `AGENTS.md` contains checklist IDs, launch steps, feature rules, or other business workflow details.
-- Structural validation passes while project purpose, stage, objective, or source authority remains ungrounded.
-- Background or superseded material remains at the root and gains false salience.
-- A new requirement or workstream document is created at an arbitrary path because no placement policy exists.
-- A generic directory tree replaces a coherent project-native structure.
-- Empty directories are created for hypothetical future domains.
-- External canonical sources are copied locally merely to fit the directory hierarchy.
+For execution spaces and agent coordination, read [collaboration.md](collaboration.md). For placement and retirement, read [asset-placement.md](asset-placement.md). For older installations, read [migration.md](migration.md).
